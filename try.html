@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Chat Box</title>
+</head>
+<body>
+    <h1>Simple Chat Box</h1>
+    <div id="chat"></div>
+    <input type="text" id="messageInput" placeholder="Type your message...">
+    <button onclick="sendMessage()">Send</button>
+
+    <script>
+        function sendMessage() {
+            var messageInput = document.getElementById("messageInput");
+            var messageText = messageInput.value.trim();
+
+            if (messageText !== "") {
+                var messageDiv = document.createElement("div");
+                messageDiv.textContent = "You: " + messageText;
+
+                var chat = document.getElementById("chat");
+                chat.appendChild(messageDiv);
+
+                saveMessage(messageText);
+
+                messageInput.value = "";
+            }
+        }
+
+        function saveMessage(message) {
+            var messages = JSON.parse(localStorage.getItem("chatMessages")) || [];
+            
+            messages.push(message);
+            
+            localStorage.setItem("chatMessages", JSON.stringify(messages));
+        }
+
+        function loadMessages() {
+            var chat = document.getElementById("chat");
+            var messages = JSON.parse(localStorage.getItem("chatMessages")) || [];
+            
+            messages.forEach(function(message) {
+                var messageDiv = document.createElement("div");
+                messageDiv.textContent = "You: " + message;
+                chat.appendChild(messageDiv);
+            });
+        }
+
+        window.onload = loadMessages;
+    </script>
+</body>
+</html>
